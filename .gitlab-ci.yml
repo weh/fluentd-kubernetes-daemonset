@@ -1,0 +1,17 @@
+stages:
+  - build
+
+build grafana loki image:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+  variables:
+    DOCKERFILE: v1.14/debian-grafana
+    VERSION: v1.14.0-debian-grafana-amd64-1
+    TAGS: v1.14.0-debian-grafana-amd64-1,v1.14-debian-grafana-amd64-1
+    IMAGE_NAME: fluent/fluentd-kubernetes-daemonset
+  script:
+    - make src
+    - make tail_container_parse.conf
+    - make image
+    - make tags
