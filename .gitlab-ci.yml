@@ -1,17 +1,14 @@
+include:
+  - project: devops/ci-templates
+    ref: master
+    file:
+      - templates/BuildDocker.gitlab-ci.yml
+
 stages:
   - build
 
-build grafana loki image:
-  stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:debug
+build image:
+  extends: .build-docker
   variables:
-    DOCKERFILE: v1.14/debian-grafana
-    VERSION: v1.14.0-debian-grafana-amd64-1
-    TAGS: v1.14.0-debian-grafana-amd64-1,v1.14-debian-grafana-amd64-1
-    IMAGE_NAME: fluent/fluentd-kubernetes-daemonset
-  script:
-    - make src
-    - make tail_container_parse.conf
-    - make image
-    - make tags
+    BUILD_CONTEXT: docker-image/v1.14/debian-grafana
+    BUILD_DOCKERFILE: docker-image/v1.14/debian-grafana/Dockerfile
