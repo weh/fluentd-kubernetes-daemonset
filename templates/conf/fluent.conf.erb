@@ -387,4 +387,17 @@
   </buffer>
 </match>
 
+<%  when "grafana"%>
+<match **>
+  @type loki
+  @id out_loki
+
+  url "#{ENV['FLUENT_LOKI_URL']}"
+  username "#{ENV['FLUENT_LOKI_USERNAME']}"
+  password "#{ENV['FLUENT_LOKI_PASSWORD']}"
+  extra_labels "#{ENV['FLUENT_LOKI_EXTRA_LABELS'] || '{"agent":"fluentd","job":"syslog"}'}"
+  flush_interval "#{ENV['FLUENT_LOKI_FLUSH_INTERVAL'] || '10s'}"
+  flush_at_shutdown "#{ENV['FLUENT_LOKI_FLUSH_AT_SHUTDOWN'] || true}"
+  buffer_chunk_limit "#{ENV['FLUENT_LOKI_BUFFER_CHUNK_LIMIT'] || '1m'}"
+</match>
 <% end %>
